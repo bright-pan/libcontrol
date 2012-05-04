@@ -57,7 +57,7 @@ typedef struct{
 
 	//This is the period of calling the controller. It is automatically acquired during calibration or, 
 	//optionally, externally given. 
-	timeUs_t T;
+	timeUs_t T;	//TODO: where is this used? where is it set?
 
 	//This is the approximate heap footprint of the object plus all of it's child objects.
 	memAddr_t memFootprint;
@@ -77,7 +77,8 @@ typedef struct{
 error_t PIDcreate(PID_o *obj, const PIDconfig_s *const config);
 inline void PIDdestroy(PID_o *obj);
 
-//error_t PIDloadGains(PIDgains_s gains);	//TODO:
+inline void PIDloadGains(PID_o *obj, PIDgains_s gains);
+inline void PIDsetPEriod(PID_o *obj, timeUs_t t);
 error_t PIDcalibrateInitialGuess(PID_o *const pid);	//fetch useful pid gains
 
 inline void PIDinit(PID_o *obj);			//push loaded gains to the controller
@@ -90,6 +91,16 @@ inline void  PIDinit(PID_o *obj){
 
 inline void  PIDdestroy(PID_o *obj){
 	free(obj);
+}
+
+inline void PIDloadGains(PID_o *obj, PIDgains_s g){
+	obj->report.gains.p = g.p;
+	obj->report.gains.i = g.i;
+	obj->report.gains.d = g.d;
+}
+
+inline void PIDsetPEriod(PID_o *obj, timeUs_t t){
+	obj->report.T = t;
 }
 
 #endif //LIB_CONTROL_PID_CONTOLLER_H_
