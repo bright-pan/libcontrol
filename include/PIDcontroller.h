@@ -53,7 +53,7 @@ inline void PIDdestroy(PID_o *obj);
 //error_t PIDloadGains(PIDgains_s gains);	//TODO:
 error_t PIDcalibrateInitialGuess(PID_o *const pid);	//fetch useful pid gains
 
-void PIDinit(PID_o *obj);	//push loaded gains to the controller
+inline void PIDinit(PID_o *obj);	//push loaded gains to the controller
 void PIDrun(PID_o *obj);	//do one pid iteration
 
 ///////////////////// Implementation of inlined functions ////////////////////////////////////////////////
