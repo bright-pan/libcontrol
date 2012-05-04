@@ -17,6 +17,9 @@
 #include <stdlib.h>
 
 //Typedefs//
+
+//For the meanings of thiese parameters, as well as advices as to how the write the appropriate
+//callback functions, please refer to PIDcontroller.h
 typedef struct{
 	void (*setter)(processValue_t);
 	processValue_t (*getter)(void);

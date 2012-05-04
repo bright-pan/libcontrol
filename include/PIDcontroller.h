@@ -23,16 +23,43 @@ typedef struct{
 }PIDgains_s;
 
 typedef struct{
+	//This sets the controller output (which is input to the plant). processValue_t[min-max] should 
+	//generally be mapped to [0-Vcc].
 	void (*setter)(processValue_t);
+
+	//getter() returns the output of the plant, realising closed-loop feedback. For advice on mapping
+	//voltages to variable values, please refer to the comment regarding setter() above.
 	processValue_t (*getter)(void);
+
 	timeUs_t (*getTimeUs)(void);
+
+	//setpoint() is provided as a function as to make the control tracking, not just stabilizing.
+	//Note, however, that calibration is done for what this function returns at the tiem of calibration.
+	//Therefore, if the setpoint deviates significantly (whaever that means) calibration should be 
+	//repeated.
 	processValue_t (*setpoint)(void);
+
+	//The supervisor() examines the output of the contoller, before that is applied. Possible uses include 
+	//clipping, rate limitting.
 	void (*supervisor)(processValue_t*);
+
+	//Slightly duplicating the functionality of supervisor(), maxSafePlantOutput is intended as the absolute
+	//maximum persmissible plant output for even a moment, any higher could lead to damage.
+	processValue_t maxSafePlantOutput;
 }PIDconfig_s;
 
 typedef struct{
+	//P, I and D coefficients of the controller. Thiese are acquired through calibration or passed in 
+	//externally. AFTER that PIDinit() has to be called to push thiese coefficients to the actual
+	//controller. After taht, calling PIDinit() at any given time resets the controller and pushes in
+	//the CURRENT (maybe changed through calibration or extrenally) coefficients to it. Have fun!
 	PIDgains_s gains;
+
+	//This is the period of calling the controller. It is automatically acquired during calibration or, 
+	//optionally, externally given. 
 	timeUs_t T;
+
+	//This is the approximate heap footprint of the object plus all of it's child objects.
 	memAddr_t memFootprint;
 }PIDreport_s;
 
@@ -53,8 +80,8 @@ inline void PIDdestroy(PID_o *obj);
 //error_t PIDloadGains(PIDgains_s gains);	//TODO:
 error_t PIDcalibrateInitialGuess(PID_o *const pid);	//fetch useful pid gains
 
-inline void PIDinit(PID_o *obj);	//push loaded gains to the controller
-void PIDrun(PID_o *obj);	//do one pid iteration
+inline void PIDinit(PID_o *obj);			//push loaded gains to the controller
+void PIDrun(PID_o *obj);				//do one pid iteration
 
 ///////////////////// Implementation of inlined functions ////////////////////////////////////////////////
 inline void  PIDinit(PID_o *obj){
