@@ -5,8 +5,7 @@ $(error This makefile cannot be called directly. Please use the top level makefi
 endif
 
 #settings
-#SRC = pid.c PIDcalibrateInitialGuess.c PIDCreateDestroy.c PIDrun.c
-SRC = PIDcalibrateInitialGuess.c PIDCreateDestroy.c PIDrun.c
+SRC = PIDcalibrateInitialGuess.c PIDCreateDestroy.c PIDrun.c pid.c
 VPATH += $(PROJ_DIR):$(PROJ_DIR)/include:$(PROJ_DIR)/include/atmel
 CFLAGS += -I$(PROJ_DIR)/include/atmel -I$(PROJ_DIR)/include -I$(PROJ_DIR)
 
