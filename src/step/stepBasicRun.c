@@ -5,8 +5,8 @@
 //License//
 //Beerware
 
-#include "preprocConfig.h"
-#include "stepExperiment.h"
+#include "PreprocConfig.h"
+#include "StepExperiment.h"
 
 //measures if the system is stable and if so, what is the setpoint
 error_t stepBasicRun(step_o * obj, processValue_t stepSize){

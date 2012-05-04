@@ -11,8 +11,8 @@
 #define LIB_CONTROL_STEP_EXPERIMENT_H_
 
 //Includes//
-#include "types.h"
-#include "preprocConfig.h"
+#include "Types.h"
+#include "PreprocConfig.h"
 
 #include <stdlib.h>
 

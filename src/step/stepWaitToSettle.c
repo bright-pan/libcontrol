@@ -5,8 +5,8 @@
 //License//
 //Beerware
 
-#include "preprocConfig.h"
-#include "stepExperiment.h"
+#include "PreprocConfig.h"
+#include "StepExperiment.h"
 
 typedef enum{
 	minimum = 0,

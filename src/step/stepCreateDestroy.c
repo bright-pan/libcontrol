@@ -5,7 +5,7 @@
 //License//
 //Beerware
 
-#include "stepExperiment.h"
+#include "StepExperiment.h"
 #include <stdlib.h>
 #include <string.h>
 

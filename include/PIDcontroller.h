@@ -10,8 +10,8 @@
 
 //Includes//
 #include "atmel/pid.h" 
-#include "types.h"
-#include "preprocConfig.h"
+#include "Types.h"
+#include "PreprocConfig.h"
 
 #include <stdlib.h>
 
@@ -23,7 +23,7 @@ typedef struct{
 }PIDgains_s;
 
 typedef struct{
-	//This sets the controller output (which is input to the plant). processValue_t[min-max] should 
+	//This sets the controller output (which is input to the plant). processValue_t[min-max] should
 	//generally be mapped to [0-Vcc].
 	void (*setter)(processValue_t);
 
@@ -35,11 +35,11 @@ typedef struct{
 
 	//setpoint() is provided as a function as to make the control tracking, not just stabilizing.
 	//Note, however, that calibration is done for what this function returns at the tiem of calibration.
-	//Therefore, if the setpoint deviates significantly (whaever that means) calibration should be 
+	//Therefore, if the setpoint deviates significantly (whaever that means) calibration should be
 	//repeated.
 	processValue_t (*setpoint)(void);
 
-	//The supervisor() examines the output of the contoller, before that is applied. Possible uses include 
+	//The supervisor() examines the output of the contoller, before that is applied. Possible uses include
 	//clipping, rate limitting.
 	void (*supervisor)(processValue_t*);
 
@@ -49,14 +49,14 @@ typedef struct{
 }PIDconfig_s;
 
 typedef struct{
-	//P, I and D coefficients of the controller. Thiese are acquired through calibration or passed in 
+	//P, I and D coefficients of the controller. Thiese are acquired through calibration or passed in
 	//externally. AFTER that PIDinit() has to be called to push thiese coefficients to the actual
 	//controller. After taht, calling PIDinit() at any given time resets the controller and pushes in
 	//the CURRENT (maybe changed through calibration or extrenally) coefficients to it. Have fun!
 	PIDgains_s gains;
 
-	//This is the period of calling the controller. It is automatically acquired during calibration or, 
-	//optionally, externally given. 
+	//This is the period of calling the controller. It is automatically acquired during calibration or,
+	//optionally, externally given.
 	timeUs_t T;	//TODO: where is this used? where is it set?
 
 	//This is the approximate heap footprint of the object plus all of it's child objects.
@@ -72,7 +72,7 @@ typedef struct{
 	PIDreport_s report;
 	PIDprivateData_s data;
 }PID_o;
-	
+
 //Functions//
 error_t PIDcreate(PID_o *obj, const PIDconfig_s *const config);
 inline void PIDdestroy(PID_o *obj);

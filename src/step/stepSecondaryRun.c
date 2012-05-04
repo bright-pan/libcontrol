@@ -5,7 +5,7 @@
 //License//
 //Beerware
 
-#include "stepExperiment.h"
+#include "StepExperiment.h"
 
 static processValue_t getLocalMaximum(const stepConfig_s *const P_params);
 

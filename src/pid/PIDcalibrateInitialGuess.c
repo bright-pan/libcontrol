@@ -15,9 +15,9 @@
  */
 
 #include "PIDcontroller.h"
-#include "stepExperiment.h"
+#include "StepExperiment.h"
 #include "atmel/pid.h"
-#include "preprocConfig.h"
+#include "PreprocConfig.h"
 
 //SCALING_FACTOR defined in atmel/pid.h
 static inline int16_t PIDf2int16(float f){
@@ -25,10 +25,10 @@ static inline int16_t PIDf2int16(float f){
 }
 
 error_t PIDcalibrateInitialGuess(PID_o *const pid){
-	
+
 	error_t ret;
 	processValue_t magnitude;
-	step_o *step;
+	step_o *step = NULL;
 	stepConfig_s cStep;
 	cStep.setter = pid->config.setter;
 	cStep.getter = pid->config.getter;
@@ -53,19 +53,19 @@ error_t PIDcalibrateInitialGuess(PID_o *const pid){
 			return ret;
 		}
 	}
-	
+
 	//2. Produce a P controller that drives the plant into the setpoint.
 	//(feedthroughGain) * (feedback gain) 	> 1	:	isntability
 	//					=	:	sustaindef oscillation
 	//					< 1	:	stability
 	pid->report.gains.p = PIDf2int16((PID_CALIBRATION_INITIAL_GUESS_RELATIVE_GAIN * (1.0 / step->report.gain)));
-	
+
 	//3. Using inverted Zeigler-Nichols table, select I and D gains.
 	timeUs_t timeConstant = (1.0 / 3.0) * step->report.settingTimeUs;	//TODO: find/derive exact T for 5% setting
 	pid->report.T = timeConstant;
 	pid->report.gains.i = PIDf2int16(pid->report.gains.p * (2 / timeConstant));	//TODO: revise logick
 	pid->report.gains.d = PIDf2int16(pid->report.gains.p * (timeConstant / 3));
-	
+
 	pid->report.memFootprint -= step->report.memFootprint;
 	stepDestroy(step);
 	return SUCCESS;
