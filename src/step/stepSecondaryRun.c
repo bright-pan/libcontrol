@@ -9,7 +9,7 @@
 
 static processValue_t getLocalMaximum(const stepConfig_s *const P_params);
 
-error_t stepRun(step_o * obj){
+error_t stepSecondaryRun(step_o * obj){
 	processValue_t processOutput, setpoint;
 	timeUs_t t0, t1, t2, t3;
 	
