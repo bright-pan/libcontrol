@@ -7,8 +7,8 @@
 
 //RECOM: run in interrupt-free enviroment for time cosntants in the us and ms range
 
-#ifndef LIB_CONTROL_STEP_H_
-#define LIB_CONTROL_STEP_H_
+#ifndef LIB_CONTROL_STEP_EXPERIMENT_H_
+#define LIB_CONTROL_STEP_EXPERIMENT_H_
 
 //Includes//
 #include "types.h"

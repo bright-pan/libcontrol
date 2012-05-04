@@ -5,8 +5,8 @@
 //License//
 //Beerware
 
-#ifndef LIB_CONTROL_INC_PID_CONTOLLER_H_
-#define LIB_CONTROL_INC_PID_CONTOLLER_H_
+#ifndef LIB_CONTROL_PID_CONTOLLER_H_
+#define LIB_CONTROL_PID_CONTOLLER_H_
 
 //Includes//
 #include "atmel/pid.h" 
@@ -92,4 +92,4 @@ inline void  PIDdestroy(PID_o *obj){
 	free(obj);
 }
 
-#endif //LIB_CONTROL_INC_PID_CONTOLLER_H_
+#endif //LIB_CONTROL_PID_CONTOLLER_H_
