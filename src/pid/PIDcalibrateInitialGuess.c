@@ -29,7 +29,11 @@ error_t PIDcalibrateInitialGuess(PID_o *const pid){
 	error_t ret;
 	processValue_t magnitude;
 	step_o *step;
-	stepConfig_s cStep;	//TODO: fill up
+	stepConfig_s cStep;
+	cStep.setter = pid->config.setter;
+	cStep.getter = pid->config.getter;
+	cStep.getTimeUs = pid->config.getTimeUs;
+	cStep.maxSafePlantOutput = pid->config.maxSafePlantOutput;
 	ret = stepCreate(step, &cStep);
 	if(ret)
 		return ret;
