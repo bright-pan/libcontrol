@@ -8,6 +8,8 @@
 #ifndef INC_LIB_CONTROL_TYPES_H
 #define INC_LIB_CONTROL_TYPES_H
 
+#include <stdint.h>
+
 typedef uint16_t processValue_t;
 typedef uint64_t timeUs_t;
 

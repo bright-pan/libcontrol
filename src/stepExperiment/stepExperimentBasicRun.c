@@ -9,7 +9,7 @@
 #include "StepExperiment.h"
 
 //measures if the system is stable and if so, what is the setpoint
-error_t stepExperimentBasicRun(stepExperiment_o * obj, processValue stepSize){
+error_t stepExperimentBasicRun(stepExperiment_o * obj, processValue_t stepSize){
 	error_t status;
 	obj->config.setter(stepSize);
 

@@ -14,12 +14,14 @@
 #include "types.h"
 #include "preprocConfig.h"
 
+#include <stdlib.h>
+
 //Typedefs//
 typedef struct{
 	void (*setter)(processValue_t);
 	processValue_t (*getter)(void);
 	timeUs_t (*getTimeUs)(void);
-	processValue_t maxSafestPlantOutput;
+	processValue_t maxSafePlantOutput;
 }stepExperimentConfig_s;
 
 typedef struct{
@@ -55,7 +57,7 @@ error_t stepExperimentBasicRun(stepExperiment_o * obj, processValue_t stepSize);
 error_t stepExperimentSecondaryRun(stepExperiment_o * obj);	
 
 //Block until process extremums deviate less than 5% from the setting point.
-error_t wait2settle(const stepExperimentConfig_s *const P_params);
+error_t wait2settle(const stepExperiment_o *const obj);
 
 //////////////////////////// Implementation of inline functions ///////////////////////////////////////
 

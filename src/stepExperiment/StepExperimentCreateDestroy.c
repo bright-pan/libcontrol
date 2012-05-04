@@ -7,8 +7,9 @@
 
 #include "StepExperiment.h"
 #include <stdlib.h>
+#include <string.h>
 
-error_t stepExperimentCreate(stepExperiment_o * obj, const stepExperimentConfiguration_s *config){
+error_t stepExperimentCreate(stepExperiment_o * obj, const stepExperimentConfig_s *config){
 	if(!config)
 		return ERROR_NULL_POINTER;
 
@@ -16,7 +17,7 @@ error_t stepExperimentCreate(stepExperiment_o * obj, const stepExperimentConfigu
 	if(!obj)
 		return ERROR_ALLOCATION_FAILURE;
 
-	memcpy(&obj->config, config, sizeof(stepExperimentConfiguration_s));
+	memcpy(&obj->config, config, sizeof(stepExperimentConfig_s));
 	obj->report.memFootprint = sizeof(obj);
 	return SUCCESS;
 }
