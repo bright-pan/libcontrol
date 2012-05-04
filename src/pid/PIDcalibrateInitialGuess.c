@@ -15,7 +15,7 @@
  */
 
 #include "PIDcontroller.h"
-#include "StepExperiment.h"
+#include "stepExperiment.h"
 #include "atmel/pid.h"
 #include "preprocConfig.h"
 
@@ -28,9 +28,9 @@ error_t PIDcalibrateInitialGuess(PID_o *const pid){
 	
 	error_t ret;
 	processValue_t magnitude;
-	stepExperiment_o *step;
-	stepExperimentConfig_s cStep;	//TODO: fill up
-	ret = stepExperimentCreate(step, &cStep);
+	step_o *step;
+	stepConfig_s cStep;	//TODO: fill up
+	ret = stepCreate(step, &cStep);
 	if(ret)
 		return ret;
 	pid->report.memFootprint += step->report.memFootprint;
@@ -38,12 +38,12 @@ error_t PIDcalibrateInitialGuess(PID_o *const pid){
 
 	//1. Find linear gain at the setpoint. Use binary search.
 	for(magnitude = 1; step->report.overshoot <= 0; magnitude *= 2){
-		ret = stepExperimentBasicRun(step, magnitude);//magnitude is increased by a power of two, overshoot is observed
+		ret = stepBasicRun(step, magnitude);//magnitude is increased by a power of two, overshoot is observed
 		if(ret != SUCCESS){
 			//handle error
 			return ret;
 		}
-		ret = stepExperimentSecondaryRun(step);	//blocking
+		ret = stepSecondaryRun(step);	//blocking
 		if(ret != SUCCESS){
 			//handle error
 			return ret;
@@ -63,6 +63,6 @@ error_t PIDcalibrateInitialGuess(PID_o *const pid){
 	pid->report.gains.d = PIDf2int16(pid->report.gains.p * (timeConstant / 3));
 	
 	pid->report.memFootprint -= step->report.memFootprint;
-	stepExperimentDestroy(step);
+	stepDestroy(step);
 	return SUCCESS;
 }

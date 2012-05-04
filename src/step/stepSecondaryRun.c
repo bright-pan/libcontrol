@@ -5,17 +5,17 @@
 //License//
 //Beerware
 
-#include "StepExperiment.h"
+#include "stepExperiment.h"
 
-static processValue_t getLocalMaximum(const stepExperimentConfig_s *const P_params);
+static processValue_t getLocalMaximum(const stepConfig_s *const P_params);
 
-error_t stepExperimentRun(stepExperiment_o * obj){
+error_t stepRun(step_o * obj){
 	processValue_t processOutput, setpoint;
 	timeUs_t t0, t1, t2, t3;
 	
 	//Firstly, turn off control until the process output settles.
 	obj->config.setter(0);
-	wait2settle(&obj->config);
+	wait2settle(obj);
 	processOutput = obj->config.getter();
 	obj->report.bias = processOutput;
 	
@@ -38,10 +38,10 @@ error_t stepExperimentRun(stepExperiment_o * obj){
 	obj->report.riseTimeUs = t2 - t1;
 	
 	//Fifth, get overshoot.
-	obj->report.overshoot = ((1.0 * getLocalMaximum(&obj->config)) / setpoint) - 1.0;
+	obj->report.overshoot = ((1.0 * getLocalMaximum(&obj->config)) / obj->report.settingPoint) - 1.0;
 
 	//Sixth, measure setting time
-	wait2settle(&obj->config);
+	wait2settle(obj);
 	t3 = obj->config.getTimeUs();
 	obj->report.settingTimeUs = t3 - t2;
 	
@@ -54,7 +54,7 @@ error_t stepExperimentRun(stepExperiment_o * obj){
 	return SUCCESS;
 }
 
-static processValue_t getLocalMaximum(const stepExperimentConfig_s *const P_params){
+static processValue_t getLocalMaximum(const stepConfig_s *const P_params){
 	processValue_t processOutput, processPreviousOutput;
 	
 	do{

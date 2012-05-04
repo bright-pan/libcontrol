@@ -6,14 +6,14 @@
 //Beerware
 
 #include "preprocConfig.h"
-#include "StepExperiment.h"
+#include "stepExperiment.h"
 
 //measures if the system is stable and if so, what is the setpoint
-error_t stepExperimentBasicRun(stepExperiment_o * obj, processValue_t stepSize){
+error_t stepBasicRun(step_o * obj, processValue_t stepSize){
 	error_t status;
 	obj->config.setter(stepSize);
 
- 	status =  wait2settle(&obj->config);
+ 	status =  wait2settle(obj);
 	if(status != SUCCESS)
 		return status;
 

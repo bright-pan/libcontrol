@@ -6,7 +6,7 @@
 //Beerware
 
 #include "preprocConfig.h"
-#include "StepExperiment.h"
+#include "stepExperiment.h"
 
 typedef enum{
 	minimum = 0,
@@ -21,7 +21,7 @@ typedef struct{
 
 //When direction of change switches, this is an extremum. Compare it's value with the prevous extremum recorded.
 //If difference is within 2 * _FIVE_PERCENT(setpoint), output is considered to have settled.
-error_t wait2settle(const stepExperiment_o *const obj){
+error_t wait2settle(const step_o *const obj){
 	uint16_t processOutput, processPreviousOutput;
 	extremum_s lastExtremum;
 
