@@ -10,7 +10,7 @@
 static processValue_t getLocalMaximum(const stepConfig_s *const P_params);
 
 error_t stepSecondaryRun(step_o * obj){
-	processValue_t processOutput, setpoint;
+	processValue_t processOutput;
 	timeUs_t t0, t1, t2, t3;
 	
 	//Firstly, turn off control until the process output settles.
