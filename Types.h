@@ -47,4 +47,10 @@ typedef enum _bool_{
 typedef int8_t _bool_t;
 
 typedef uint16_t memAddr_t;
+
+
+#define LIB_CONTROL_FLOAT_POINT_POSITION 16
+typedef int32_t float_t;	//aka S32Q16
+inline float_t int2float(processValue_t n){return ((float_t)n << LIB_CONTROL_FLOAT_POINT_POSITION);}
+inline processValue_t float2int(float_t f){return (processValue_t)(f >> LIB_CONTROL_FLOAT_POINT_POSITION);}
 #endif	//INC_LIB_CONTROL_TYPES_H

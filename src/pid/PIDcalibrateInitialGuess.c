@@ -20,9 +20,8 @@
 #include "PreprocConfig.h"
 
 //SCALING_FACTOR defined in atmel/pid.h
-	//TODO: remove floats!!
-static inline int16_t PIDf2int16(float f){
-	return ((int16_t)(f) * (SCALING_FACTOR));
+static inline int16_t PIDf2int16(float_t f){
+	return (float2int(f) * (SCALING_FACTOR));
 }
 
 error_t PIDcalibrateInitialGuess(PID_o *const pid){
@@ -59,10 +58,10 @@ error_t PIDcalibrateInitialGuess(PID_o *const pid){
 	//(feedthroughGain) * (feedback gain) 	> 1	:	isntability
 	//					=	:	sustaindef oscillation
 	//					< 1	:	stability
-	pid->report.gains.p = PIDf2int16((PID_CALIBRATION_INITIAL_GUESS_RELATIVE_GAIN * (1.0 / step->report.gain)));
+	pid->report.gains.p = PIDf2int16(PID_CALIBRATION_INITIAL_GUESS_RELATIVE_GAIN * (int2float(1) / int2float(step->report.gain)) );
 
-	//3. Using inverted Zeigler-Nichols table, select I and D gains.
-	timeUs_t timeConstant = (1.0 / 3.0) * step->report.settingTimeUs;	//TODO: find/derive exact T for 5% setting
+	//3. Using inverted Zeigler-Nichols table, select I and D gains.			//TODO: flaoting point emulation issues!!
+	timeUs_t timeConstant = (int2float(1) / int2float(3) * step->report.settingTimeUs);	//TODO: find/derive exact T for 5% setting
 	pid->report.T = timeConstant;
 	pid->report.gains.i = PIDf2int16(pid->report.gains.p * (2 / timeConstant));	//TODO: revise logick
 	pid->report.gains.d = PIDf2int16(pid->report.gains.p * (timeConstant / 3));

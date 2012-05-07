@@ -38,7 +38,8 @@ error_t stepSecondaryRun(step_o * obj){
 	obj->report.riseTimeUs = t2 - t1;
 	
 	//Fifth, get overshoot.
-	obj->report.overshoot = ((1.0 * getLocalMaximum(&obj->config)) / obj->report.settingPoint) - 1.0;
+	processOutput = getLocalMaximum(&obj->config);
+	obj->report.overshoot = int2float(processOutput - obj->report.settingPoint) / int2float(obj->report.settingPoint);
 
 	//Sixth, measure setting time
 	wait2settle(obj);
@@ -49,7 +50,7 @@ error_t stepSecondaryRun(step_o * obj){
 	obj->report.settingPoint = obj->config.getter();
 	
 	//Eight, calculate gain
-	obj->report.gain = obj->report.settingPoint / obj->report.stepSize;
+	obj->report.gain = int2float(obj->report.settingPoint) / int2float(obj->report.stepSize);
 
 	return SUCCESS;
 }

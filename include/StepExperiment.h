@@ -28,12 +28,11 @@ typedef struct{
 }stepConfig_s;
 
 typedef struct{
-	//TODO: remove floats
-	float gain;				// == setpoint / magnitude
+	float_t gain;				// == setpoint / magnitude
 	timeUs_t pureDelayUs;			// == time from step to increase of process output to  5% of setpoint
 	timeUs_t riseTimeUs;			// == time from step to increase of process output to 95% of setpoint
 	timeUs_t settingTimeUs;			// == time from step to when process output is stable to within 5% of setpoint
-	float overshoot;			// == (max(responses[]) / setpoint) - 1
+	float_t overshoot;			// == (max(responses[]) / setpoint) - 1
 	processValue_t bias; 			// == process output when input is zero
 	processValue_t settingPoint;		//plant output after transients have passed
 	processValue_t stepSize;		//
