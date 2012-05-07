@@ -11,6 +11,9 @@
 #include <stdint.h>
 
 typedef uint16_t processValue_t;
+inline processValue_t fivePercent(processValue_t in){return in / 20;}
+inline processValue_t ninetyFivePercent(processValue_t in){return (in - in / 20);}
+
 typedef uint64_t timeUs_t;
 
 typedef enum error_{
@@ -53,4 +56,5 @@ typedef uint16_t memAddr_t;
 typedef int32_t float_t;	//aka S32Q16
 inline float_t int2float(processValue_t n){return ((float_t)n << LIB_CONTROL_FLOAT_POINT_POSITION);}
 inline processValue_t float2int(float_t f){return (processValue_t)(f >> LIB_CONTROL_FLOAT_POINT_POSITION);}
+
 #endif	//INC_LIB_CONTROL_TYPES_H

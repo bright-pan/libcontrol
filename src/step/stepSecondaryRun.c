@@ -26,14 +26,14 @@ error_t stepSecondaryRun(step_o * obj){
 	//Thirdly, measure pureDelayUs
 	do{
 		processOutput = obj->config.getter();
-	}while(processOutput < _FIVE_PERCENT(obj->report.settingPoint));
+	}while(processOutput < fivePercent(obj->report.settingPoint));
 	t1 = obj->config.getTimeUs();
 	obj->report.pureDelayUs = t1 - t0;
 
 	//Fourth, identify riseTimeUs.
 	do{
 		processOutput = obj->config.getter();
-	}while(processOutput < _NINETY_FIVE_PERCENT(obj->report.settingPoint));
+	}while(processOutput < ninetyFivePercent(obj->report.settingPoint));
 	t2 = obj->config.getTimeUs();
 	obj->report.riseTimeUs = t2 - t1;
 	
