@@ -20,6 +20,7 @@
 #include "PreprocConfig.h"
 
 //SCALING_FACTOR defined in atmel/pid.h
+	//TODO: remove floats!!
 static inline int16_t PIDf2int16(float f){
 	return ((int16_t)(f) * (SCALING_FACTOR));
 }

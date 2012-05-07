@@ -28,6 +28,7 @@ typedef struct{
 }stepConfig_s;
 
 typedef struct{
+	//TODO: remove floats
 	float gain;				// == setpoint / magnitude
 	timeUs_t pureDelayUs;			// == time from step to increase of process output to  5% of setpoint
 	timeUs_t riseTimeUs;			// == time from step to increase of process output to 95% of setpoint
