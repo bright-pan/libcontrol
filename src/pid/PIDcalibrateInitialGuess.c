@@ -60,11 +60,10 @@ error_t PIDcalibrateInitialGuess(PID_o *const pid){
 	//					< 1	:	stability
 	pid->report.gains.p = PIDf2int16(PID_CALIBRATION_INITIAL_GUESS_RELATIVE_GAIN * (int2float(1) / int2float(step->report.gain)) );
 
-	//3. Using inverted Zeigler-Nichols table, select I and D gains.			//TODO: flaoting point emulation issues!!
-	timeUs_t timeConstant = (int2float(1) / int2float(3) * step->report.settingTimeUs);	//TODO: find/derive exact T for 5% setting
-	pid->report.T = timeConstant;
-	pid->report.gains.i = PIDf2int16(pid->report.gains.p * (2 / timeConstant));	//TODO: revise logick
-	pid->report.gains.d = PIDf2int16(pid->report.gains.p * (timeConstant / 3));
+	//3. Using inverted Zeigler-Nichols table, select I and D gains.
+	timeUs_t criticalPeriod = 3 * step->report.timeConstant;	//very approximately - three oscillations
+	pid->report.gains.i = PIDf2int16(pid->report.gains.p * (1048576 / criticalPeriod));	//(1 << 20)us -> s
+	pid->report.gains.d = PIDf2int16(pid->report.gains.p * (criticalPeriod / 3000000));
 
 	pid->report.memFootprint -= step->report.memFootprint;
 	stepDestroy(step);

@@ -13,6 +13,7 @@
 typedef uint16_t processValue_t;
 inline processValue_t fivePercent(processValue_t in){return in / 20;}
 inline processValue_t ninetyFivePercent(processValue_t in){return (in - in / 20);}
+#define LIB_CONTROL_MINUS_LN05 3
 
 typedef uint64_t timeUs_t;
 

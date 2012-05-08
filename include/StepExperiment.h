@@ -37,6 +37,7 @@ typedef struct{
 	processValue_t settingPoint;		//plant output after transients have passed
 	processValue_t stepSize;		//
 	memAddr_t memFootprint;
+	timeUs_t timeConstant;
 }stepReport_s;
 
 typedef struct{

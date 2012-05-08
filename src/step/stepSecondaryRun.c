@@ -48,9 +48,13 @@ error_t stepSecondaryRun(step_o * obj){
 	
 	//Seventh, record settingPoint, hopefully with higher accuracy than in the basic experiment.
 	obj->report.settingPoint = obj->config.getter();
-	
+
+	//TODO: gain and time constant are first order model attributes. Their place is not here.	
 	//Eight, calculate gain
 	obj->report.gain = int2float(obj->report.settingPoint) / int2float(obj->report.stepSize);
+
+	//Ningth, calculate the first-order model time constant
+	obj->report.timeConstant = obj->report.settingTimeUs / LIB_CONTROL_MINUS_LN05;
 
 	return SUCCESS;
 }
