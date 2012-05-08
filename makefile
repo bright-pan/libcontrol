@@ -7,7 +7,7 @@ endif
 #settings
 export
 PROJ = control
-MODULES = pid step
+MODULES = pid step lin
 VPATH += src:include:build
 
 PROJNAME = lib$(PROJ).a
