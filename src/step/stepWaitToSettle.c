@@ -36,7 +36,7 @@ error_t wait2settle(const step_o *const obj){
 
 		if(lastExtremum.type == minimum){
 			if(processOutput < processPreviousOutput){
-				if(processOutput - lastExtremum.value < _FIVE_PERCENT(obj->report.settingPoint))
+				if(processOutput - lastExtremum.value < fivePercent(obj->report.settingPoint))
 					return SUCCESS;
 				else{
 					lastExtremum.value = (processPreviousOutput + processOutput) / 2;
@@ -46,7 +46,7 @@ error_t wait2settle(const step_o *const obj){
 			break;
 		}else{
 			if(processOutput > processPreviousOutput){
-				if(lastExtremum.value - processOutput < _FIVE_PERCENT(obj->report.settingPoint))
+				if(lastExtremum.value - processOutput < fivePercent(obj->report.settingPoint))
 					return SUCCESS;
 				else{
 					lastExtremum.value = (processPreviousOutput + processOutput) / 2;
