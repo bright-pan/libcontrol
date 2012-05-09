@@ -19,7 +19,7 @@ all:
 	$(foreach var, $(MODULES), cd $(PROJ_DIR)/src/$(var) && $(MAKE) all;)
 	$(MAKE) archive
 	$(MAKE) demos
-#	rm -f build/*.o build/*.d
+	rm  build/*.out build/*.d build/demo*.o
 
 disasm: $(DISASSM)
 	$(foreach var, $(MODULES), cd $(PROJ_DIR)/src/$(var) && $(MAKE) disasm)
