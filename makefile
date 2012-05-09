@@ -8,15 +8,17 @@ endif
 export
 PROJ = control
 MODULES = pid step lin
+DEMOS = CalibrateAndRun RunBare RunEasy
 VPATH += src:include:build
 
 PROJNAME = lib$(PROJ).a
 PROJ_DIR = $(CURDIR)
 
-.PHONY: all disasm clean archive
+.PHONY: all disasm clean archive demos
 all:
 	$(foreach var, $(MODULES), cd $(PROJ_DIR)/src/$(var) && $(MAKE) all;)
 	$(MAKE) archive
+	$(MAKE) demos
 #	rm -f build/*.o build/*.d
 
 disasm: $(DISASSM)
@@ -29,3 +31,6 @@ clean:
 
 archive:
 	$(ARCHIVE) rcs build/$(PROJNAME) $(wildcard build/*.o)
+
+demos:
+	$(foreach var, $(DEMOS), cd $(PROJ_DIR)/demos/$(var) && $(MAKE) all;)
