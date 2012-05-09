@@ -30,7 +30,7 @@ all: control
 control:
 	cd $(ROOT_DIR) && $(MAKE) -j$(HOST_CORES)
 
-control_disasm:
+disasm:
 	cd $(ROOT_DIR) && $(MAKE) -j$(HOST_CORES) disasm
 
 #control_config:

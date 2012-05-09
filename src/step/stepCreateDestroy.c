@@ -18,6 +18,6 @@ error_t stepCreate(step_o * obj, const stepConfig_s *config){
 		return ERROR_ALLOCATION_FAILURE;
 
 	memcpy(&obj->config, config, sizeof(stepConfig_s));
-	obj->report.memFootprint = sizeof(obj);
+	obj->report.memFootprint = sizeof(step_o);
 	return SUCCESS;
 }

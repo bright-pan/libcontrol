@@ -19,7 +19,7 @@ error_t linCreate(lin_o *obj, const linConfig_s *const config){
 		return ERROR_ALLOCATION_FAILURE;
 
 	memcpy((void*)&obj->config, (void*)config, sizeof(linConfig_s));
-	obj->report.memFootprint = sizeof(obj);
+	obj->report.memFootprint = sizeof(lin_o);
 
 	return SUCCESS;
 }
