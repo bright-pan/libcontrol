@@ -46,6 +46,12 @@ typedef struct{
 	//Slightly duplicating the functionality of supervisor(), maxSafePlantOutput is intended as the absolute
 	//maximum persmissible plant output for even a moment, any higher could lead to damage.
 	processValue_t maxSafePlantOutput;
+
+	//This is the period of calling the controller. If changed, I and D gains have to be
+	//changed either through recalibration, or by:
+	// * dividing I by the relative increase of T AND
+	// * multiplying D by the relative increase if T.
+	timeUs_t T;
 }PIDconfig_s;
 
 typedef struct{
@@ -54,10 +60,6 @@ typedef struct{
 	//controller. After taht, calling PIDinit() at any given time resets the controller and pushes in
 	//the CURRENT (maybe changed through calibration or extrenally) coefficients to it. Have fun!
 	PIDgains_s gains;
-
-	//This is the period of calling the controller. It is automatically acquired during calibration or,
-	//optionally, externally given.
-	timeUs_t T;	//TODO: where is this used? where is it set?
 
 	//This is the approximate heap footprint of the object plus all of it's child objects.
 	memAddr_t memFootprint;
@@ -78,7 +80,6 @@ error_t PIDcreate(PID_o *obj, const PIDconfig_s *const config);
 inline void PIDdestroy(PID_o *obj);
 
 inline void PIDloadGains(PID_o *obj, PIDgains_s gains);
-inline void PIDsetPEriod(PID_o *obj, timeUs_t t);
 error_t PIDcalibrateInitialGuess(PID_o *const pid);	//fetch useful pid gains
 
 inline void PIDinit(PID_o *obj);			//push loaded gains to the controller
@@ -97,10 +98,6 @@ inline void PIDloadGains(PID_o *obj, PIDgains_s g){
 	obj->report.gains.p = g.p;
 	obj->report.gains.i = g.i;
 	obj->report.gains.d = g.d;
-}
-
-inline void PIDsetPEriod(PID_o *obj, timeUs_t t){
-	obj->report.T = t;
 }
 
 #endif //LIB_CONTROL_PID_CONTOLLER_H_

@@ -6,7 +6,7 @@ UC = atmega168
 LIBC = /usr/lib/avr
 CFLAGS = -fpack-struct -Wall -Os -mcall-prologues -I$(LIBC)/include -mmcu=$(UC) -Winline -finline-functions \
  -Wstrict-prototypes --std=c99 -Iinclude -Winline
-LDFLAGS = -lm -lc -L$(LIBC)/lib -Wall -mmcu=$(UC) 
+LDFLAGS = -lm -lc -L$(LIBC)/lib -Wall -mmcu=$(UC)
 HEXFORMAT = ihex
 HOST_CORES = 1
 

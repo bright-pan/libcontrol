@@ -16,8 +16,7 @@ error_t stepSecondaryRun(step_o * obj){
 	//Firstly, turn off control until the process output settles.
 	obj->config.setter(0);
 	wait2settle(obj);
-	processOutput = obj->config.getter();
-	obj->report.bias = processOutput;
+	obj->report.bias = obj->config.getter();
 	
 	//Secondly, record t0 and perform a step change of the controller output;
 	t0 = obj->config.getTimeUs();
@@ -39,7 +38,7 @@ error_t stepSecondaryRun(step_o * obj){
 	
 	//Fifth, get overshoot.
 	processOutput = getLocalMaximum(&obj->config);
-	obj->report.overshoot = int2float(processOutput - obj->report.settingPoint) / int2float(obj->report.settingPoint);
+	obj->report.overshoot = int2float(processOutput - obj->report.settingPoint) / obj->report.settingPoint;
 
 	//Sixth, measure setting time
 	wait2settle(obj);

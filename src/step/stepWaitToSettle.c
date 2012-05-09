@@ -20,9 +20,9 @@ typedef struct{
 }extremum_s;
 
 //When direction of change switches, this is an extremum. Compare it's value with the prevous extremum recorded.
-//If difference is within 2 * _FIVE_PERCENT(setpoint), output is considered to have settled.
+//If difference is within 2 * fivePercent(setpoint), output is considered to have settled.
 error_t wait2settle(const step_o *const obj){
-	uint16_t processOutput, processPreviousOutput;
+	processValue_t processOutput, processPreviousOutput;
 	extremum_s lastExtremum;
 
 	lastExtremum.type = minimum;
@@ -34,7 +34,7 @@ error_t wait2settle(const step_o *const obj){
 		if(processOutput > obj->config.maxSafePlantOutput)
 			return ERROR_PROCESS_OUTPUT_HIGHER_THAN_ALLOWED;
 
-		if(lastExtremum.type == minimum){
+		if(lastExtremum.type == minimum){	//look for a maximum
 			if(processOutput < processPreviousOutput){
 				if(processOutput - lastExtremum.value < fivePercent(obj->report.settingPoint))
 					return SUCCESS;
@@ -43,8 +43,7 @@ error_t wait2settle(const step_o *const obj){
 					lastExtremum.type = maximum;
 				}
 			}
-			break;
-		}else{
+		}else{			//look for a minimum
 			if(processOutput > processPreviousOutput){
 				if(lastExtremum.value - processOutput < fivePercent(obj->report.settingPoint))
 					return SUCCESS;
@@ -53,7 +52,6 @@ error_t wait2settle(const step_o *const obj){
 					lastExtremum.type = minimum;
 				}
 			}
-			break;	
 		}
 		processPreviousOutput = processOutput;
 	}while(1);

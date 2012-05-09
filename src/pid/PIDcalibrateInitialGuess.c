@@ -18,6 +18,7 @@
 #include "StepExperiment.h"
 #include "LinearModel.h"
 #include "atmel/pid.h"
+#include "PreprocConfig.h"
 
 //SCALING_FACTOR defined in atmel/pid.h
 static inline int16_t PIDf2int16(float_t f){
@@ -38,7 +39,6 @@ error_t PIDcalibrateInitialGuess(PID_o *const pid){
 	if(ret)
 		return ret;
 	pid->report.memFootprint += step->report.memFootprint;
-	//step->report.gain = -1;	//stepCreate does that
 
 	//1. Find linear gain at the setpoint. Use binary search.
 	for(magnitude = 1; step->report.overshoot <= 0; magnitude *= 2){
@@ -67,12 +67,17 @@ error_t PIDcalibrateInitialGuess(PID_o *const pid){
 	//(feedthroughGain) * (feedback gain) 	> 1	:	isntability
 	//					=	:	sustaindef oscillation
 	//					< 1	:	stability
-	pid->report.gains.p = PIDf2int16(PID_CALIBRATION_INITIAL_GUESS_RELATIVE_GAIN * (int2float(1) / int2float(model->report.gain)) );
+	processValue_t temp;
+	temp = LIB_CONTROL_PID_CALIBRATION_INITIALGUESS_RELATIVE_GAIN / float2int(model->report.gain * SCALING_FACTOR);
+	pid->report.gains.p = float2int(temp * SCALING_FACTOR * SCALING_FACTOR);
 
-	//4. Using inverted Zeigler-Nichols table, select I and D gains.
+	//4. Using modified Zeigler-Nichols table, select I and D gains.
 	timeUs_t criticalPeriod = 3 * model->report.timeConstant;	//very approximately - three oscillations
-	pid->report.gains.i = PIDf2int16(pid->report.gains.p * (1048576 / criticalPeriod));	//(1 << 20)us -> s
-	pid->report.gains.d = PIDf2int16(pid->report.gains.p * (criticalPeriod / 3000000));
+	double_t precise;
+	precise = ((pid->report.gains.p * 2 * pid->config.T) / criticalPeriod);
+	pid->report.gains.i = precise;
+	precise = (pid->report.gains.p * criticalPeriod) / (3 * pid->config.T);
+	pid->report.gains.d = precise;
 
 	model->report.memFootprint -= model->report.memFootprint;
 	linDestroy(model);
