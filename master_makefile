@@ -1,0 +1,47 @@
+#Top-level makefile.
+
+#settings
+export
+UC = atmega168
+LIBC = /usr/lib/avr
+CFLAGS = -fpack-struct -Wall -Os -mcall-prologues -I$(LIBC)/include -mmcu=$(UC) -Winline -finline-functions \
+ -Wstrict-prototypes --std=c99 -Iinclude -Winline
+LDFLAGS = -lm -lc -L$(LIBC)/lib -Wall -mmcu=$(UC) 
+HEXFORMAT = ihex
+HOST_CORES = 1
+
+#executables
+CC = avr-gcc
+ARCHIVE = avr-ar
+OBJCOPY = avr-objcopy
+OBJDUMP = avr-objdump
+SIZE = avr-size
+AVRDUDE = avrdude
+REMOVE = rm -f
+
+ROOT_DIR = $(CURDIR)
+
+#rules
+.PHONY: all control help clean
+
+all: control
+
+######################################################
+control:
+	cd $(ROOT_DIR) && $(MAKE) -j$(HOST_CORES)
+
+control_disasm:
+	cd $(ROOT_DIR) && $(MAKE) -j$(HOST_CORES) disasm
+
+#control_config:
+#	cd $(ROOT_DIR)/control && $(MAKE) -j$(HOST_CORES) config
+
+control_clean:
+	cd $(ROOT_DIR) && $(MAKE) clean
+######################################################
+
+help:
+	#TODO
+
+clean:
+	$(MAKE) clean
