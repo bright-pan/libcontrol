@@ -22,8 +22,6 @@ error_t PIDcreate(PID_o *obj, const PIDconfig_s *const config){
 	memcpy((void*)&obj->config, (void*)config, sizeof(PIDconfig_s));
 	obj->report.memFootprint = sizeof(PID_o);
 
-	pid_Init(0, 0, 0, &obj->data.algData);
-
 	return SUCCESS;
 }
 
