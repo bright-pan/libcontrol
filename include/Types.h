@@ -17,7 +17,7 @@ inline processValue_t ninetyFivePercent(processValue_t in){return (in - in / 20)
 
 typedef uint32_t timeUs_t;	//1h 11m 30s
 
-typedef enum error_{
+typedef enum{
 	SUCCESS,
 	ERROR_ALLOCATION_FAILURE,
 	ERROR_NULL_POINTER,
@@ -33,22 +33,17 @@ typedef enum error_{
 	
 	ERROR_NOT_INITIALIZED,
 	ERROR_NOT_PROPERLY_DEINITIALIZED,
-	
-//minHAL:
-	CPU_FREQ_NOT_SUPPORTED,
-
-
 
 	ERROR_UNKNOWN,
 	ERROR_NOT_IMPLEMENTED,
 }error_e;
 typedef int8_t error_t;
 
-typedef enum _bool_{
+typedef enum{
 	false = 0,
 	true,
-}_bool_e;
-typedef int8_t _bool_t;
+}bool_e;
+typedef int8_t bool_t;
 
 typedef uint16_t memAddr_t;
 

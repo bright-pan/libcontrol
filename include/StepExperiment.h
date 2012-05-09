@@ -13,7 +13,6 @@
 //Includes//
 #include "Types.h"
 #include "PreprocConfig.h"
-
 #include <stdlib.h>
 
 //Typedefs//
