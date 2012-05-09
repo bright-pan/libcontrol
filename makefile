@@ -14,20 +14,24 @@ VPATH += src:include:build
 PROJNAME = lib$(PROJ).a
 PROJ_DIR = $(CURDIR)
 
-.PHONY: all disasm clean archive demos
+.PHONY: all disasm clean archive demos clean_useless
 all:
 	$(foreach var, $(MODULES), cd $(PROJ_DIR)/src/$(var) && $(MAKE) all;)
 	$(MAKE) archive
 	$(MAKE) demos
-	rm  build/*.out build/*.d build/demo*.o
+	$(MAKE) clean_useless
 
 disasm: $(DISASSM)
-	$(foreach var, $(MODULES), cd $(PROJ_DIR)/src/$(var) && $(MAKE) disasm)
+	$(foreach var, $(MODULES), cd $(PROJ_DIR)/src/$(var) && $(MAKE) disasm;)	
+	$(MAKE) clean_useless
 
 #config: #TODO
 
 clean:
 	$(REMOVE) build/*
+
+clean_useless:
+	rm -f build/*.out build/*.d build/demo*.o
 
 archive:
 	$(ARCHIVE) rcs build/$(PROJNAME) $(wildcard build/*.o)
