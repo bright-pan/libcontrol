@@ -21,5 +21,4 @@ void	USARTtransmitBlock(unsigned char* data, unsigned char bytes );
 error_t USARTreceive(unsigned char*);//blocking
 void USARTflush( void );
 
-
-
+#endif //#ifndef LIB_CONTOL_DEMOS_USART_H_
