@@ -6,7 +6,7 @@
 #include <avr/interrupt.h>
 
 //In this simple example, the single job of the controller is to determine the coefficients of a single
-//external object. Possibilities: RLC circuit, heater-in-a-box.
+//external object. Possibilities: RLC circuit, heater-in-a-box, voltage divider.
 //target: atmega168, 8MHz nominal
 //output: OC0A
 //input: ADC0
@@ -41,7 +41,8 @@ void commandPidCalibrate(void);
 #define ACK ASCII_CONTROL_ACK
 #define ERROR_UNKNOWN_COMMAND 255
 
-#define DEBUG_PRINT(X) 	USARTtransmitBlock((unsigned char *)&X, sizeof(X));
+inline void DEBUG_TAG(uint8_t X) {USARTtransmit(X);}
+#define DEBUG_PRINT(X) 	USARTtransmitBlock((unsigned char *)&X, sizeof(X))
 
 //send ENQ
 //wait for a command
@@ -69,15 +70,16 @@ void main(void){
 	//stream the report
 	case PID_CALIBRATE:
 		temp = get();	//adc test
-		DEBUG_PRINT(temp)
+		DEBUG_PRINT(temp);
 		//commandPidCalibrate();
 		break;
 
 	//run PID with loaded gains and hardcoded frequency
 	case PID_RUN:
-		USARTtransmit(TCNT0);
 
-
+		OCR0A += 10;
+		DEBUG_TAG(OCR0A);
+		DEBUG_TAG(TCNT0);
 
 //		set(20000);
 		//handleError(ERROR_NOT_IMPLEMENTED);
