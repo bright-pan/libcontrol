@@ -159,12 +159,14 @@ void init(void){
 //	DDRA = 0x0;	//in
 
 	//pwm
-	TCCR0A = (1<<COM0A1) | (1<<WGM01) | (1<<WGM00);	//fast pwm, no clock prescaling, output on PB3
-	TCCR0B = (1<<WGM02) | (1<<CS00);
-	OCR0A = 0;	//safe output: 0 volts
+	DDRD = 0xff;	//out
+	TCCR0A = (1<<WGM01) | (1<<WGM00) | (1<<COM0A1);	//fast pwm, no clock prescaling, output on OC0A
+	TCCR0B = (1<<CS00) | (1<<CS01);
+	TCCR0B |= (1 << COM0A1);			//clear OC0A on compare match, set at BOTTOM
+	OCR0A = 0;					//safe output: 0 volts
 
 	//adc
-	ADMUX = (1<<REFS0);		//range [0 - Vcc], free running mode
+	ADMUX = (1<<REFS0);		//range [0 - Vcc], single conversion mode
 	ADCSRA = (1<<ADEN)|(1<<ADPS2)|(1<<ADPS1)|(1<<ADPS0);	//prescaler 128
 //	ADCSRA = (1<<ADSC);	//start 
 
