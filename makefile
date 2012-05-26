@@ -8,7 +8,7 @@ endif
 export
 PROJ = control
 MODULES = pid step lin
-DEMOS = CalibrateAndRun RunBare RunEasy
+DEMOS = CalibrateAndRun RunBare RunEasy hardwareTest
 VPATH += src:include:build
 
 PROJNAME = lib$(PROJ).a
