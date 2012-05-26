@@ -48,7 +48,7 @@ typedef struct{
 }step_o;
 
 //Functions//
-error_t stepCreate(step_o * obj, const stepConfig_s *config);
+error_t stepCreate(step_o **obj, const stepConfig_s *config);
 inline void stepDestroy(step_o * obj);
 
 //measures if the system is stable and if so, what is the setpoint

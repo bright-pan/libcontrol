@@ -76,7 +76,7 @@ typedef struct{
 }PID_o;
 
 //Functions//
-error_t PIDcreate(PID_o *obj, const PIDconfig_s *const config);
+error_t PIDcreate(PID_o **obj, const PIDconfig_s *const config);
 inline void PIDdestroy(PID_o *obj);
 
 inline void PIDloadGains(PID_o *obj, PIDgains_s gains);

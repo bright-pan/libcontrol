@@ -38,7 +38,7 @@ typedef struct{
 }lin_o;
 
 //Functions//
-error_t linCreate(lin_o *obj, const linConfig_s *const config);
+error_t linCreate(lin_o **obj, const linConfig_s *const config);
 inline void linDestroy(lin_o *obj);
 
 //linFirstOrder() computes gain and timeConstant according to a firt order process model:
