@@ -19,9 +19,27 @@
 //#define PID_CALIBRATION_INITIAL_GUESS_RELATIVE_GAIN 0.5
 #define LIB_CONTROL_PID_CALIBRATION_INITIALGUESS_RELATIVE_GAIN (int2float(1) / 2)
 
-//ZN calibration table variant
-//#define _PID_CALIBRATION_ORIGINAL
-//#define _PID_CALIBRATION_LITTLE_OVERSHOOT
-//#define _PID_CALIBRATION_NO_OVERSHOOT
+//To capture debug dumps, define a print function and call it in this macro. If not
+//defined or defined as empty, no machine instructions are generated.
+#ifndef CONTROL_DEBUG_PRINT(X)
+#define CONTROL_DEBUG_PRINT(X)
+#endif
+
+//Define values to various debugging events. Empty value generates no instrucions.
+#ifndef CONTROL_DEBUG_TRACE_STEP_BASIC_RUN_0
+#define CONTROL_DEBUG_TRACE_STEP_BASIC_RUN_0
+#endif
+#ifndef CONTROL_DEBUG_TRACE_STEP_BASIC_RUN_1
+#define CONTROL_DEBUG_TRACE_STEP_BASIC_RUN_1
+#endif
+#ifndef CONTROL_DEBUG_TRACE_STEP_BASIC_RUN_2
+#define CONTROL_DEBUG_TRACE_STEP_BASIC_RUN_2
+#endif
+#ifndef CONTROL_DEBUG_TRACE_STEP_BASIC_RUN_3
+#define CONTROL_DEBUG_TRACE_STEP_BASIC_RUN_3
+#endif
+#ifndef CONTROL_DEBUG_TRACE_STEP_BASIC_RUN_4
+#define CONTROL_DEBUG_TRACE_STEP_BASIC_RUN_4
+#endif
 
 #endif	//INC_LIB_CONTROL_PREPROC_CONFIG_H
