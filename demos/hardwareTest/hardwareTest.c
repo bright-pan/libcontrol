@@ -5,11 +5,19 @@
 #include <avr/io.h>
 #include <avr/interrupt.h>
 
-//In this simple example, the single job of the controller is to determine the coefficients of a single
-//external object. Possibilities: RLC circuit, heater-in-a-box, voltage divider.
-//target: atmega168, 8MHz nominal
-//output: OC0A
-//input: ADC0
+/* In this simple example, the single job of the controller is to determine the coefficients of a single
+ * external object. Possibilities: RLC circuit, heater-in-a-box, voltage divider.
+ * target: atmega168, 8MHz nominal
+ * output: OC0A
+ * input: ADC0
+ * 
+ * Precision measurements:
+ * Test setup: Vcc reference, no AVCC, no external cap at AREF
+ * ADC: precision: 0.01 Vcc
+ * accuracy: 0.1 Vcc
+ * TODO: compensate for offset 
+ * PWM : 32kHz
+*/
 
 const processValue_t G_maxProcessValue = -1;	//as type is unsigned, this corresponds to the MAX value
 const processValue_t G_setpoint = 0x7fff;	//Vcc/2 - set this according to application
@@ -42,6 +50,7 @@ void commandPidCalibrate(void);
 #define ERROR_UNKNOWN_COMMAND 255
 
 inline void DEBUG_TAG(uint8_t X) {USARTtransmit(X);}
+//#define DEBUG_TAG(X) {USARTtransmit(X);}
 #define DEBUG_PRINT(X) 	USARTtransmitBlock((unsigned char *)&X, sizeof(X))
 
 //send ENQ
@@ -69,35 +78,22 @@ void main(void){
 	//run calibration
 	//stream the report
 	case PID_CALIBRATE:
-		temp = get();	//adc test
-		DEBUG_PRINT(temp);
-		//commandPidCalibrate();
+		commandPidCalibrate();
 		break;
 
 	//run PID with loaded gains and hardcoded frequency
 	case PID_RUN:
-
-		OCR0A += 10;
-		DEBUG_TAG(OCR0A);
-		DEBUG_TAG(TCNT0);
-
-//		set(20000);
-		//handleError(ERROR_NOT_IMPLEMENTED);
-		//USARTtransmit(ASCII_PRINTABLE_X);
+		handleError(ERROR_NOT_IMPLEMENTED);
 		break;
 
 	//perform a step experiment with the passed magnitude
 	case STEP_RUN:
-		temp = 1000;
-		DEBUG_PRINT(temp);
-//		handleError(ERROR_NOT_IMPLEMENTED);		
-//		USARTtransmit(ASCII_PRINTABLE_C);
+		handleError(ERROR_NOT_IMPLEMENTED);		
 		break;
 
 	//report memory usage
 	case REPORT_STATUS:
 		handleError(ERROR_NOT_IMPLEMENTED);		
-		USARTtransmit(ASCII_PRINTABLE_V);
 		break;
 	default:
 		handleError(ERROR_UNKNOWN_COMMAND);
@@ -106,7 +102,7 @@ void main(void){
 }
 
 void commandPidCalibrate(void){
-USARTtransmit(ASCII_PRINTABLE_a);
+DEBUG_TAG(ASCII_PRINTABLE_a);
 	PID_o *pid;
 	PIDconfig_s pidConfig;
 	error_t ret;
@@ -119,18 +115,18 @@ USARTtransmit(ASCII_PRINTABLE_a);
 	pidConfig.maxSafePlantOutput = G_maxProcessValue;	
 	ret = PIDcreate(pid, &pidConfig);
 	handleError(ret);
-USARTtransmit(ASCII_PRINTABLE_b);
+DEBUG_TAG(ASCII_PRINTABLE_b);
 	//run calibration
 	ret = PIDcalibrateInitialGuess(pid);
 	handleError(ret);
-USARTtransmit(ASCII_PRINTABLE_c);
+DEBUG_TAG(ASCII_PRINTABLE_c);
 	//report
 	USARTtransmit(START_OF_TEXT);
 	USARTtransmitBlock((unsigned char*)&(pid->report), sizeof(pid->report));
 	USARTtransmit(END_OF_TEXT);
-USARTtransmit(ASCII_PRINTABLE_d);
+DEBUG_TAG(ASCII_PRINTABLE_d);
 	PIDdestroy(pid);
-USARTtransmit(ASCII_PRINTABLE_e);
+DEBUG_TAG(ASCII_PRINTABLE_e);
 }
 
 void commandPidRun(void){
@@ -144,12 +140,8 @@ void commandReportStatus(void){
 
 void handleError(error_t e){
 	if(e){
-		USARTtransmit(ERROR_OCCURED);
-		USARTtransmit(e);
-
-		//TODO: maybe dump memory and registers
-
-//		while(1);
+		DEBUG_TAG((uint8_t)(ERROR_OCCURED));
+		DEBUG_TAG((uint8_t)(e));
 	}
 }
 
@@ -161,14 +153,13 @@ void init(void){
 	//pwm
 	DDRD = 0xff;	//out
 	TCCR0A = (1<<WGM01) | (1<<WGM00) | (1<<COM0A1);	//fast pwm, no clock prescaling, output on OC0A
-	TCCR0B = (1<<CS00) | (1<<CS01);
+	TCCR0B = (1<<CS00);
 	TCCR0B |= (1 << COM0A1);			//clear OC0A on compare match, set at BOTTOM
 	OCR0A = 0;					//safe output: 0 volts
 
 	//adc
 	ADMUX = (1<<REFS0);		//range [0 - Vcc], single conversion mode
 	ADCSRA = (1<<ADEN)|(1<<ADPS2)|(1<<ADPS1)|(1<<ADPS0);	//prescaler 128
-//	ADCSRA = (1<<ADSC);	//start 
 
 	//time
 	TCCR1B = (1<<CS11);	//tick every us
@@ -182,8 +173,7 @@ ISR(TIMER1_OVF_vect){
 }
 
 void set(processValue_t in){
-	OCR0A = 0xff;
-	//OCR0A = in / 255;
+	OCR0A = in / 255;
 }
 
 processValue_t get(void){
@@ -197,7 +187,7 @@ processValue_t setp(){
 
 void super(processValue_t *inout){
 	if (*inout > G_critical){
-		*inout = 3;
+		*inout = 0;
 		g_alarm = 1;
 	}
 }
