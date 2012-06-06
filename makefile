@@ -1,25 +1,38 @@
 #Library-level makefile. Should not be called directly.
 
-ifneq (1, $(MAKELEVEL))	#make counsts from 0
-#$(error This makefile cannot be called directly. Please use the top level makefile.)
+#TODO: MAKELEVEL 1 when first called, 2 when makefile calls itself
+ifeq (1, $(MAKELEVEL))	#make counts from 0
+	#first entrance in the file
+	#indicete taht everithung is ok
+#	OK=1
+else
+	ifeq (2, $(MAKELEVEL))
+		#self recursive call
+		#check that everithing is ok
+		ifneq (OK, 1)
+#			$(error This makefile cannot be called directly. Please use the top level makefile. $(MAKELEVEL))
+		endif
+	else
+#	$(error This makefile cannot be called directly. Please use the top level makefile. $(MAKELEVEL))
+	endif
 endif
 
 #settings
 export
 PROJ = control
 MODULES = pid step lin
-DEMOS = CalibrateAndRun RunBare RunEasy hardwareTest
+DEMOS = hardwareTest #RunBare #CalibrateAndRun RunEasy 
 VPATH += src:include:build
 
 PROJNAME = lib$(PROJ).a
 PROJ_DIR = $(CURDIR)
 
-.PHONY: all disasm clean archive demos clean_useless
+.PHONY: all disasm clean archive demos clean_intermediate
 all:
 	$(foreach var, $(MODULES), cd $(PROJ_DIR)/src/$(var) && $(MAKE) all;)
 	$(MAKE) archive
 	$(MAKE) demos
-	$(MAKE) clean_useless
+	$(MAKE) clean_intermediate
 
 disasm: $(DISASSM)
 	$(foreach var, $(MODULES), cd $(PROJ_DIR)/src/$(var) && $(MAKE) disasm;)	
@@ -30,7 +43,7 @@ disasm: $(DISASSM)
 clean:
 	$(REMOVE) build/*
 
-clean_useless:
+clean_intermediate:
 	rm -f build/*.out build/*.d build/demo*.o
 
 archive:

@@ -6,10 +6,13 @@
 
 */
 
+#ifndef LIB_CONTOL_DEMOS_USART_H_
+#define LIB_CONTOL_DEMOS_USART_H_
+
 #include "Types.h"
 
 typedef enum{
-	OK,
+	OK = 64,
 	ERROR_USART_FRAME_ERROR,
 	ERROR_USART_DATA_OVERRUN_ERROR,
 	ERROR_USART_PARITY_ERROR,

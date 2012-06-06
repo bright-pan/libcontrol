@@ -24,19 +24,13 @@ typedef struct{
 error_t wait2settle(const step_o *const obj){
 
 	//Initial values. Set a safe value for a fictional previous extremum.
-CONTROL_DEBUG_TAG(240);
+
 	CONTROL_DEBUG_TAG(CONTROL_DEBUG_TRACE_STEP_WAIT_TO_SETTLE_0);
-CONTROL_DEBUG_TAG(241);
 	processValue_t processOutput, processPreviousOutput;
-CONTROL_DEBUG_TAG(242);
 	extremum_s lastExtremum;
-CONTROL_DEBUG_TAG(243);
 	lastExtremum.type = minimum;
-CONTROL_DEBUG_TAG(244);
 	lastExtremum.value = 0;
-CONTROL_DEBUG_TAG(245);
 	processPreviousOutput = 0;
-CONTROL_DEBUG_TAG(246);
 
 	//Main loop. Each iteration consists of:
 	//	* read process output
