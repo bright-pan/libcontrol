@@ -3,7 +3,7 @@
 #TODO: MAKELEVEL 1 when first called, 2 when makefile calls itself
 ifeq (1, $(MAKELEVEL))	#make counts from 0
 	#first entrance in the file
-	#indicete taht everithung is ok
+	#indicete that everithung is ok
 #	OK=1
 else
 	ifeq (2, $(MAKELEVEL))

@@ -6,7 +6,7 @@
 
 */
 
-#include "USART.h"
+#include "usart.h"
 #include "Types.h"
 #include <avr/io.h>
 
