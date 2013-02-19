@@ -20,7 +20,7 @@ endif
 #settings
 export
 PROJ = control
-MODULES = pid step lin
+MODULES = pid step lin onoff 
 DEMOS = hardwareTest #RunBare #CalibrateAndRun RunEasy 
 VPATH += src:include:build
 
