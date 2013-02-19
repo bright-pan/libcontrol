@@ -20,12 +20,12 @@
 /* In this simple example, the single job of the controller is to determine the coefficients of a single
  * external object. Possibilities: RLC circuit, heater-in-a-box, voltage divider.
  * target: atmega168, 8MHz internal oscilator
- * 
+ *
  * Precision measurements:
  * Test setup: Vcc reference, no AVCC, no external cap at AREF
  * ADC: precision: 0.01 Vcc
  * accuracy: 0.1 Vcc
- * TODO: compensate for offset 
+ * TODO: compensate for offset
  * TODO: noise canceling - is it needed - rather offset compensation!
  * PWM : 32kHz
 */
@@ -51,6 +51,10 @@ void commandPidCalibrate(void);
 void commandStepRun(void);
 void commandAdcGet(void);
 void commandTempGet(void);
+
+ISR(TIMER1_OVF_vect){
+	time += 0xffff;
+}
 
 //general keyboard commands - work within concrete behaviours
 #define COMMAND_OK ASCII_CONTROL_CR
@@ -84,11 +88,11 @@ void main(void){
 
 	init();
 
-	while(1){
 	//ready - wait for a command
-	USARTtransmit(ASCII_CONTROL_ENQ);
+	while(1){
+	DEBUG_PRINT("Command?\n");
 	handleError(USARTreceive(&command));		//blocking
-	USARTtransmit(ACK);
+	DEBUG_PRINT("Acknowadged.");
 
 	switch(command){
 	// RELEASE //
@@ -122,8 +126,9 @@ void main(void){
 
 	default:
 		handleError(ERROR_UNKNOWN_COMMAND);
-	}
-	};//while(1);
+	}	//switch(command)
+	};	//while(1);
+
 }
 
 //////////////////////////////// Implementation of local functions //////////////
@@ -138,9 +143,12 @@ void handleError(error_t e){
 
 void init(void){
 	//ports
-	DDRB = 0xff;	//out
-//	DDRA = 0x0;	//in
+//	DDRB = 0xff;	//out
 
+	//power led
+	DDRD |= (1 << PD6);
+	PORTD |= (1 << PD6);
+	
 	//pwm
 	DDRD = 0xff;	//out
 	TCCR0A = (1<<WGM01) | (1<<WGM00) | (1<<COM0A1);	//fast pwm, no clock prescaling, output on OC0A
@@ -153,16 +161,12 @@ void init(void){
 	ADCSRA = (1<<ADEN)|(1<<ADPS2)|(1<<ADPS1)|(1<<ADPS0);	//prescaler 128
 
 	//time
-	TCCR1B = (1<<CS11);	//tick every us
+	TCCR1B = (1<<CS11);		//tick every us
 	TIMSK1 = (1<<TOIE1);	//interrupt on oveflow
 
 	USARTinit();
 
 	sei();
-}
-
-ISR(TIMER1_OVF_vect){
-	time += 0xffff;
 }
 
 void set(processValue_t in){
@@ -211,34 +215,31 @@ processValue_t ReadADC(uint8_t ch)
    return(ADC);
 }
 
-
-
-
 //Given some value of type processValue_t:
 //+ increases the value
 //- decreases the value
 //
-void handleValue(processValue_t t){
+void handleValue(processValue_t *t){
 	unsigned char command;
 
 	while(1){
-	DEBUG_PRINT(t);
-	handleError(USARTreceive(&command));		//blocking
+		DEBUG_PRINT(t);
+		handleError(USARTreceive(&command));		//blocking
 
-	switch(command){
-	case COMMAND_OK:
-		return;
+		switch(command){
+		case COMMAND_OK:
+			return;
+ 
+		case COMMAND_INCREASE:
+			t += INCREMENT;
+			break;
 
-	case COMMAND_INCREASE:
-		t += INCREMENT;
-		break;
-
-	case COMMAND_DECREASE:
-		t -= INCREMENT;
-		break;
-	default:
-		handleError(ERROR_UNKNOWN_COMMAND);
-	}
+		case COMMAND_DECREASE:
+			t -= INCREMENT;
+			break;
+		default:
+			handleError(ERROR_UNKNOWN_COMMAND);
+		}
 	}
 }
 

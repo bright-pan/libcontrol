@@ -1,7 +1,7 @@
 /*
  * USART communication. Hardcoded configuration. Polling mode.
  * Frame: 1 start bit, 8 data bits, 1 even parity bit, 2 stop bits
- * baud rate = 38.4k; UBRR = 12; ClockError = 0.2% 
+ * baud rate = 38.4k; UBRR = 12; ClockError = 0.2%
  * mode: asynchronious normal mode
 
 */
