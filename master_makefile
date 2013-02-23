@@ -4,7 +4,7 @@
 
 #settings
 export
-UC = atmega168
+UC = atmega8
 LIBC = /usr/lib/avr
 CFLAGS = \
  -mmcu=$(UC) \

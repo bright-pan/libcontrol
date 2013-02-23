@@ -21,7 +21,7 @@ endif
 export
 PROJ = control
 MODULES = pid step lin onoff 
-DEMOS = hardwareTest #RunBare #CalibrateAndRun RunEasy 
+DEMOS = #hardwareTest #RunBare #CalibrateAndRun RunEasy 
 VPATH += src:include:build
 
 PROJNAME = lib$(PROJ).a
