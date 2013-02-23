@@ -1,11 +1,26 @@
 #Top-level makefile.
+#Defines constans for the wlole build process
+#This makefile is aimed to be responsible for building several projects and is provided here for completeness.
 
 #settings
 export
 UC = atmega168
 LIBC = /usr/lib/avr
-CFLAGS = -fpack-struct -Wall -Os -mcall-prologues -I$(LIBC)/include -mmcu=$(UC) -Winline -finline-functions \
- -Wstrict-prototypes --std=c99 -Iinclude -Winline
+CFLAGS = \
+ -mmcu=$(UC) \
+ -std=c99 \
+ -Wall -Wextra -Winline -Wno-main\
+ -Os \
+ -I$(LIBC)/include \
+ -mcall-prologues \
+ -finline-functions \
+ -mrelax
+# -Wstrict-prototypes 
+# -mcall-prologues \ # generate strtup and shutdown subroutins for function start and end
+# -maccumulate-args \ # pop function arguments after enbtering the function, isntead of after exiting
+# -finline-functions \ # consider all functions for inlining. actvated by -O3
+# -mrelax \# use short jumps and calls, if posstible
+# -fpack-structs \# no padding. binary uncompatible with code, compiled without this switch
 LDFLAGS = -lm -lc -L$(LIBC)/lib -Wall -mmcu=$(UC)
 HEXFORMAT = ihex
 HOST_CORES = 1
@@ -19,7 +34,7 @@ SIZE = avr-size
 AVRDUDE = avrdude
 REMOVE = rm -f
 
-ROOT_DIR = $(CURDIR)
+ROOT_DIR = $(CURDIR) #i.e. pwd; CURDIR is an automatic variable
 
 #rules
 .PHONY: all control help clean
