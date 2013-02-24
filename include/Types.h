@@ -15,6 +15,9 @@ inline processValue_t fivePercent(processValue_t in){return in / 20;}
 inline processValue_t ninetyFivePercent(processValue_t in){return (in - in / 20);}
 #define LIB_CONTROL_MINUS_LN05 3
 
+#define FOREVER 1
+#define NEVER 0
+
 typedef uint32_t timeUs_t;	//1h 11m 30s
 
 typedef enum{
