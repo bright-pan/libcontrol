@@ -24,4 +24,5 @@ void ONOFFrun(ONOFF_o *obj){
 	
 	obj->config.supervisor(&control);
 	obj->config.setter(control);
+	obj->data.previousOutput = control;
 }
