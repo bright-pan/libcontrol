@@ -10,15 +10,16 @@
 
 #include <stdint.h>
 
-typedef int32_t processValue_t;
+typedef int16_t processValue_t;
+typedef int64_t timeUs_t;
+typedef uint16_t memAddr_t;
+
 inline processValue_t fivePercent(processValue_t in){return in / 20;}
 inline processValue_t ninetyFivePercent(processValue_t in){return (in - in / 20);}
 #define LIB_CONTROL_MINUS_LN05 3
 
 #define FOREVER 1
 #define NEVER 0
-
-typedef uint32_t timeUs_t;	//1h 11m 30s
 
 typedef enum{
 	SUCCESS = 0,
@@ -47,9 +48,6 @@ typedef enum{
 	true,
 }bool_e;
 typedef int8_t bool_t;
-
-typedef uint16_t memAddr_t;
-
 
 #define LIB_CONTROL_FLOAT_POINT_POSITION 16
 typedef int32_t float_t;	//aka S32Q16
