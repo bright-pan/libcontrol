@@ -21,8 +21,8 @@ inline processValue_t ninetyFivePercent(processValue_t in){return (in - in / 20)
 typedef uint32_t timeUs_t;	//1h 11m 30s
 
 typedef enum{
-	SUCCESS,
-	ERROR_ALLOCATION_FAILURE,
+	SUCCESS = 0,
+	ERROR_ALLOCATION_FAILURE = 64,	// -127-63 reserved for application error codes
 	ERROR_NULL_POINTER,
 	ERROR_PROCESS_OUTPUT_HIGHER_THAN_ALLOWED,
 	EROR_PROCESS_OUTPUT_EXCEEDS_MAX_EVEN_FOR_ZERO_INPUT,
